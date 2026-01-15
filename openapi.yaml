@@ -1,0 +1,739 @@
+openapi: 3.1.0
+info:
+  title: Agent Platform API
+  description: Build, deploy, and manage production-ready AI agents
+  version: 1.0.0
+  contact:
+    email: support@agentplatform.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://api.agentplatform.com/v1
+    description: Production
+  - url: https://api.staging.agentplatform.com/v1
+    description: Staging
+  - url: http://localhost:8000/api/v1
+    description: Local Development
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Agents
+    description: Agent management and execution
+  - name: Executions
+    description: Agent execution history and logs
+  - name: Integrations
+    description: External service integrations
+  - name: Marketplace
+    description: Agent marketplace operations
+
+security:
+  - BearerAuth: []
+
+paths:
+  # Authentication
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Email already exists
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Login user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: Logout user
+      responses:
+        '204':
+          description: Logged out successfully
+
+  # Agents
+  /agents:
+    get:
+      tags: [Agents]
+      summary: List agents
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, active, archived]
+      responses:
+        '200':
+          description: List of agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentListResponse'
+
+    post:
+      tags: [Agents]
+      summary: Create a new agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentCreateRequest'
+      responses:
+        '201':
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /agents/{agent_id}:
+    parameters:
+      - $ref: '#/components/parameters/AgentId'
+
+    get:
+      tags: [Agents]
+      summary: Get agent details
+      responses:
+        '200':
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [Agents]
+      summary: Update agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentUpdateRequest'
+      responses:
+        '200':
+          description: Agent updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+
+    delete:
+      tags: [Agents]
+      summary: Delete agent
+      responses:
+        '204':
+          description: Agent deleted
+
+  /agents/{agent_id}/run:
+    parameters:
+      - $ref: '#/components/parameters/AgentId'
+
+    post:
+      tags: [Agents]
+      summary: Execute agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecutionRequest'
+      responses:
+        '200':
+          description: Execution result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Execution'
+        '402':
+          description: Insufficient credits
+
+  /agents/{agent_id}/run/stream:
+    parameters:
+      - $ref: '#/components/parameters/AgentId'
+
+    post:
+      tags: [Agents]
+      summary: Execute agent with streaming
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecutionRequest'
+      responses:
+        '200':
+          description: Server-sent events stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  # Executions
+  /executions:
+    get:
+      tags: [Executions]
+      summary: List executions
+      parameters:
+        - name: agent_id
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, running, completed, failed]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: List of executions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionListResponse'
+
+  /executions/{execution_id}:
+    parameters:
+      - name: execution_id
+        in: path
+        required: true
+        schema:
+          type: string
+
+    get:
+      tags: [Executions]
+      summary: Get execution details
+      responses:
+        '200':
+          description: Execution details with logs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionDetail'
+
+  # Integrations
+  /integrations:
+    get:
+      tags: [Integrations]
+      summary: List available integrations
+      responses:
+        '200':
+          description: Available integrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Integration'
+
+    post:
+      tags: [Integrations]
+      summary: Connect an integration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationConnectRequest'
+      responses:
+        '201':
+          description: Integration connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+
+  # Marketplace
+  /marketplace/listings:
+    get:
+      tags: [Marketplace]
+      summary: Browse marketplace listings
+      security: []
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [popular, recent, rating]
+      responses:
+        '200':
+          description: Marketplace listings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketplaceListResponse'
+
+  /marketplace/listings/{listing_id}/install:
+    parameters:
+      - name: listing_id
+        in: path
+        required: true
+        schema:
+          type: string
+
+    post:
+      tags: [Marketplace]
+      summary: Install marketplace agent
+      responses:
+        '201':
+          description: Agent installed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agent'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    AgentId:
+      name: agent_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Agent ID (agt_xxx format)
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    # Auth
+    RegisterRequest:
+      type: object
+      required: [email, password, name]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        name:
+          type: string
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        token_type:
+          type: string
+          default: bearer
+        expires_in:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        organization_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    # Agents
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        system_prompt:
+          type: string
+        model:
+          type: string
+        tools:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [draft, active, archived]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    AgentCreateRequest:
+      type: object
+      required: [name, system_prompt]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        system_prompt:
+          type: string
+        model:
+          type: string
+          default: gpt-4
+        tools:
+          type: array
+          items:
+            type: string
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 2
+          default: 0.7
+
+    AgentUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        system_prompt:
+          type: string
+        model:
+          type: string
+        tools:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum: [draft, active, archived]
+
+    AgentListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Agent'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    # Executions
+    ExecutionRequest:
+      type: object
+      required: [input]
+      properties:
+        input:
+          type: string
+        context:
+          type: object
+        session_id:
+          type: string
+
+    Execution:
+      type: object
+      properties:
+        id:
+          type: string
+        agent_id:
+          type: string
+        status:
+          type: string
+          enum: [pending, running, completed, failed]
+        input:
+          type: string
+        output:
+          type: string
+        tokens_used:
+          type: integer
+        duration_ms:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+
+    ExecutionDetail:
+      allOf:
+        - $ref: '#/components/schemas/Execution'
+        - type: object
+          properties:
+            logs:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExecutionLog'
+            tool_calls:
+              type: array
+              items:
+                $ref: '#/components/schemas/ToolCall'
+
+    ExecutionLog:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        level:
+          type: string
+        message:
+          type: string
+
+    ToolCall:
+      type: object
+      properties:
+        tool_name:
+          type: string
+        input:
+          type: object
+        output:
+          type: object
+        duration_ms:
+          type: integer
+
+    ExecutionListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    # Integrations
+    Integration:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        status:
+          type: string
+          enum: [connected, disconnected, error]
+        connected_at:
+          type: string
+          format: date-time
+
+    IntegrationConnectRequest:
+      type: object
+      required: [provider]
+      properties:
+        provider:
+          type: string
+        credentials:
+          type: object
+
+    # Marketplace
+    MarketplaceListing:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        author:
+          type: string
+        rating:
+          type: number
+        install_count:
+          type: integer
+        pricing:
+          type: object
+          properties:
+            model:
+              type: string
+              enum: [free, one_time, subscription]
+            price:
+              type: number
+
+    MarketplaceListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketplaceListing'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    # Common
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        total_pages:
+          type: integer
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            details:
+              type: object
