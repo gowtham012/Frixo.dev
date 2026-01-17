@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { LogoDark } from "@/components/ui/logo";
 
 const navLinks = [
   { href: "/about", label: "About" },
@@ -44,26 +45,23 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-6xl">
         <motion.div
-          className={`mt-4 transition-all duration-500 ${
-            isScrolled
-              ? "nm-extruded-sm"
-              : "bg-transparent"
-          }`}
+          className={`mt-4 transition-all duration-500 ${isScrolled
+            ? "nm-extruded-sm"
+            : "bg-transparent"
+            }`}
           style={{
             borderRadius: isScrolled ? "20px" : "0px",
           }}
         >
           <div className="relative flex h-16 items-center justify-between px-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center group flex-shrink-0">
-              <motion.span
-                className="text-lg font-bold tracking-tight"
+            <Link href="/" className="flex-shrink-0">
+              <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                <span className="text-foreground">Frixo</span>
-                <span className="text-accent-cyan">.dev</span>
-              </motion.span>
+                <LogoDark size="md" />
+              </motion.div>
             </Link>
 
             {/* Desktop Navigation - absolutely centered */}
@@ -83,23 +81,21 @@ export function Navbar() {
                     >
                       {/* Active/Hover background */}
                       <motion.div
-                        className={`absolute inset-0 rounded-lg ${
-                          isActive
-                            ? "bg-accent-cyan/15"
-                            : "bg-gradient-to-r from-accent-cyan/10 to-accent-purple/10"
-                        }`}
+                        className={`absolute inset-0 rounded-lg ${isActive
+                          ? "bg-accent-cyan/15"
+                          : "bg-gradient-to-r from-accent-cyan/10 to-accent-purple/10"
+                          }`}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: isActive || isHovered ? 1 : 0 }}
                         transition={{ duration: 0.2 }}
                       />
 
-                      <span className={`relative z-10 ${
-                        isActive
-                          ? "text-accent-cyan font-medium"
-                          : isHovered
-                            ? "text-accent-cyan"
-                            : "text-foreground-muted hover:text-foreground"
-                      }`}>
+                      <span className={`relative z-10 ${isActive
+                        ? "text-accent-cyan font-medium"
+                        : isHovered
+                          ? "text-accent-cyan"
+                          : "text-foreground-muted hover:text-foreground"
+                        }`}>
                         {link.label}
                       </span>
                     </Link>
@@ -111,7 +107,7 @@ export function Navbar() {
             {/* CTA Buttons */}
             <div className="hidden md:flex items-center gap-3 flex-shrink-0">
               <Link
-                href="https://github.com/frixo-dev"
+                href="https://github.com/getpitlanes"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group"
@@ -195,7 +191,7 @@ export function Navbar() {
 
                   <div className="mt-4 pt-4 border-t border-background-border space-y-3">
                     <Link
-                      href="https://github.com/frixo-dev"
+                      href="https://github.com/getpitlanes"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="nm-button flex items-center justify-center gap-2 py-3 text-foreground-muted"

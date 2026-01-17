@@ -5,6 +5,7 @@ import { BuildOptions } from "@/components/landing/build-options";
 import { Features } from "@/components/landing/features";
 import { Integrations } from "@/components/landing/integrations";
 import { UseCases } from "@/components/landing/use-cases";
+import { Marketplace } from "@/components/landing/marketplace";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { BackgroundNoiseGradient } from "@/components/ui/background-noise-gradient";
 
@@ -29,6 +30,9 @@ export default function Home() {
 
       {/* Integrations - App connections showcase */}
       <Integrations />
+
+      {/* Marketplace - Buy & Sell Agents */}
+      <Marketplace />
 
       {/* Use Cases - Real-world agents */}
       <UseCases />

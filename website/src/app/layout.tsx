@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Orbitron } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/ui/flickering-footer";
@@ -9,8 +9,15 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+// Unique futuristic font for the brand/logo
+const orbitron = Orbitron({
+  variable: "--font-logo",
+  subsets: ["latin"],
+  weight: ["700", "900"],
+});
+
 export const metadata: Metadata = {
-  title: "Frixo.dev | One Prompt. Any Agent.",
+  title: "Pitlane | One Prompt. Any Agent.",
   description:
     "Build any AI agent from one prompt. Integrated evals, tracing, A2A, memory, multi-LLM fallback. Self-evolving agents. Deploy with one click. Sell on our marketplace. The all-in-one platform.",
   keywords: [
@@ -27,19 +34,19 @@ export const metadata: Metadata = {
     "agent memory",
     "agent deployment",
     "LangChain alternative",
-    "Frixo.dev",
+    "Pitlane",
   ],
-  authors: [{ name: "Frixo.dev" }],
+  authors: [{ name: "Pitlane" }],
   openGraph: {
-    title: "Frixo.dev | One Prompt. Any Agent.",
+    title: "Pitlane | One Prompt. Any Agent.",
     description:
       "Build any agent from one prompt. Self-evolving agents. Integrated evals, tracing, A2A, memory. Deploy and sell on marketplace.",
     type: "website",
-    siteName: "Frixo.dev",
+    siteName: "Pitlane",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frixo.dev | One Prompt. Any Agent.",
+    title: "Pitlane | One Prompt. Any Agent.",
     description:
       "Build any AI agent from one prompt. Self-evolving. Integrated evals, tracing, A2A, memory. Deploy. Sell on marketplace.",
   },
@@ -53,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
+        className={`${inter.variable} ${orbitron.variable} font-sans antialiased bg-background text-foreground min-h-screen`}
       >
         {/* Skip to main content link for accessibility */}
         <a

@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 const comparisons = [
   {
@@ -16,7 +15,7 @@ const comparisons = [
     isAlternative: true,
   },
   {
-    title: "Frixo",
+    title: "Pitlane",
     items: [
       "Natural language → production agent",
       "7 eval types auto-generated",
@@ -36,9 +35,6 @@ const stats = [
 ];
 
 export function WhyDifferent() {
-  const headerRef = useRef(null);
-  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
-
   return (
     <section className="relative py-32 overflow-hidden">
       {/* Subtle gradient background */}
@@ -47,9 +43,9 @@ export function WhyDifferent() {
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          ref={headerRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
@@ -63,7 +59,8 @@ export function WhyDifferent() {
         {/* Comparison Grid */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="grid md:grid-cols-2 gap-6"
         >
@@ -86,7 +83,8 @@ export function WhyDifferent() {
                   <motion.li
                     key={index}
                     initial={{ opacity: 0, x: column.isAlternative ? -10 : 10 }}
-                    animate={isHeaderInView ? { opacity: 1, x: 0 } : {}}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ margin: "-100px" }}
                     transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
                     className="flex items-start gap-3"
                   >
@@ -112,7 +110,8 @@ export function WhyDifferent() {
         {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8"
         >

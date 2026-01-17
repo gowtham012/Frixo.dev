@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, ReactNode } from "react";
-import { motion, useInView } from "framer-motion";
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
 
 // SVG Icon components for reliable rendering
 const icons: Record<string, ReactNode> = {
@@ -137,17 +137,15 @@ const outerRing = [
 ];
 
 export function Integrations() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section className="relative py-32 overflow-hidden">
       {/* Dramatic background lighting */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Central glow behind platform */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 1.5 }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         >
@@ -155,7 +153,8 @@ export function Integrations() {
         </motion.div>
         <motion.div
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
+          whileInView={{ opacity: 1 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 2, delay: 0.3 }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
         >
@@ -170,7 +169,8 @@ export function Integrations() {
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
@@ -190,7 +190,8 @@ export function Integrations() {
           {/* Floating Platform - The hero element */}
           <motion.div
             initial={{ opacity: 0, y: 60, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ margin: "-100px" }}
             transition={{
               duration: 1,
               delay: 0.2,
@@ -269,7 +270,8 @@ export function Integrations() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       initial={{ pathLength: 0 }}
-                      animate={isInView ? { pathLength: 1 } : {}}
+                      whileInView={{ pathLength: 1 }}
+                      viewport={{ once: true }}
                       transition={{ duration: 1.5, delay: 0.5 }}
                     />
                     <defs>
@@ -296,7 +298,8 @@ export function Integrations() {
                 <motion.div
                   key={app.name}
                   initial={{ opacity: 0, scale: 0 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ margin: "-100px" }}
                   transition={{
                     duration: 0.6,
                     delay: 0.5 + index * 0.1,
@@ -356,7 +359,8 @@ export function Integrations() {
                 <motion.div
                   key={app.name}
                   initial={{ opacity: 0, scale: 0 }}
-                  animate={isInView ? { opacity: 0.7, scale: 1 } : {}}
+                  whileInView={{ opacity: 0.7, scale: 1 }}
+                  viewport={{ margin: "-100px" }}
                   transition={{
                     duration: 0.6,
                     delay: 0.8 + index * 0.08,
@@ -408,7 +412,8 @@ export function Integrations() {
             {/* Inner orbital ring */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 1, delay: 0.4 }}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] sm:w-[360px] sm:h-[360px] rounded-full border border-accent-cyan/10"
             />
@@ -416,7 +421,8 @@ export function Integrations() {
             {/* Outer orbital ring */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 1, delay: 0.6 }}
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] sm:w-[600px] sm:h-[600px] rounded-full border border-accent-purple/8 hidden sm:block"
             />
@@ -426,7 +432,8 @@ export function Integrations() {
         {/* Bottom text */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 1.2 }}
           className="text-center mt-8"
         >

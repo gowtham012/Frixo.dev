@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 const stats = [
@@ -66,9 +65,6 @@ const timeline = [
 ];
 
 export default function AboutPage() {
-  const heroRef = useRef(null);
-  const isHeroInView = useInView(heroRef, { once: true, margin: "-100px" });
-
   return (
     <div className="pt-24">
       {/* Hero Section - Split Layout */}
@@ -82,14 +78,15 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left - Text */}
             <motion.div
-              ref={heroRef}
               initial={{ opacity: 0, x: -30 }}
-              animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 0.6 }}
             >
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
-                animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ margin: "-100px" }}
                 className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-6"
               >
                 <span className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
@@ -116,7 +113,7 @@ export default function AboutPage() {
                   </svg>
                 </Link>
                 <Link
-                  href="https://github.com/frixo-dev"
+                  href="https://github.com/getpitlanes"
                   target="_blank"
                   className="nm-button h-12 px-6 flex items-center gap-2 text-sm text-foreground-muted hover:text-accent-cyan transition-colors"
                 >
@@ -131,7 +128,8 @@ export default function AboutPage() {
             {/* Right - Stats Grid */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
-              animate={isHeroInView ? { opacity: 1, x: 0 } : {}}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="grid grid-cols-2 gap-4"
             >
@@ -139,7 +137,8 @@ export default function AboutPage() {
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isHeroInView ? { opacity: 1, y: 0 } : {}}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ margin: "-100px" }}
                   transition={{ delay: 0.3 + i * 0.1 }}
                   className="nm-extruded p-6 text-center group hover:scale-[1.02] transition-transform"
                 >
@@ -248,7 +247,7 @@ export default function AboutPage() {
               </div>
               <div className="space-y-4 text-foreground-body leading-relaxed">
                 <p>
-                  We built Frixo because we saw teams spending months on infrastructure
+                  We built Pitlane because we saw teams spending months on infrastructure
                   that had nothing to do with their core product.
                 </p>
                 <p>
@@ -321,7 +320,7 @@ export default function AboutPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="https://github.com/frixo-dev"
+                  href="https://github.com/getpitlanes"
                   target="_blank"
                   className="btn-hybrid h-12 px-6 flex items-center gap-2 text-sm"
                 >
@@ -354,7 +353,7 @@ export default function AboutPage() {
             <h2 className="text-xl font-semibold text-foreground mb-6">Get in Touch</h2>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <a
-                href="mailto:hello@frixo.dev"
+                href="mailto:hello@getpitlanes.com"
                 className="nm-button h-10 px-4 flex items-center gap-2 text-sm text-foreground-muted hover:text-accent-cyan transition-colors"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -363,7 +362,7 @@ export default function AboutPage() {
                 Email
               </a>
               <a
-                href="https://twitter.com/frixodev"
+                href="https://twitter.com/getpitlanes"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="nm-button h-10 px-4 flex items-center gap-2 text-sm text-foreground-muted hover:text-accent-cyan transition-colors"
@@ -374,7 +373,7 @@ export default function AboutPage() {
                 Twitter
               </a>
               <a
-                href="https://discord.gg/frixo"
+                href="https://discord.gg/pitlanes"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="nm-button h-10 px-4 flex items-center gap-2 text-sm text-foreground-muted hover:text-accent-cyan transition-colors"

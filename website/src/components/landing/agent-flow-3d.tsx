@@ -506,7 +506,7 @@ function DemoVisualization({ demo, isActive }: { demo: Demo; isActive: boolean }
                   <div className="flex-1 nm-extruded-sm rounded-2xl rounded-tl-sm overflow-hidden">
                     {/* Email Header */}
                     <div className="px-4 py-3 bg-background-elevated border-b border-background-border">
-                      <div className="text-xs text-foreground-dim mb-1">From: platform@frixo.dev</div>
+                      <div className="text-xs text-foreground-dim mb-1">From: platform@getpitlanes.com</div>
                       <div className="text-sm font-medium text-foreground">{step.emailSubject}</div>
                     </div>
                     {/* Email Body */}
@@ -1044,14 +1044,16 @@ export function AgentFlow3D() {
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ margin: "-100px" }}
             transition={{ delay: 0.2 }}
             className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-8"
           >
@@ -1085,7 +1087,8 @@ export function AgentFlow3D() {
         {/* Demo selector - Two clear scenarios */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ delay: 0.3 }}
           className="flex justify-center mb-8"
         >
@@ -1117,7 +1120,8 @@ export function AgentFlow3D() {
         {/* Split Demo Container - Side by Side Windows */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ delay: 0.4 }}
         >
           {/* Window Labels - change based on demo type */}
@@ -1164,7 +1168,8 @@ export function AgentFlow3D() {
               {/* LEFT: Agent Builder - What user sees */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ margin: "-100px" }}
                 transition={{ delay: 0.4 }}
                 className="h-[620px]"
               >
@@ -1188,7 +1193,8 @@ export function AgentFlow3D() {
               {/* RIGHT: System Logs - What's happening behind the scenes */}
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ margin: "-100px" }}
                 transition={{ delay: 0.5 }}
                 className="hidden lg:block h-[620px]"
               >
@@ -1254,7 +1260,8 @@ export function AgentFlow3D() {
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ delay: 0.7 + i * 0.1 }}
               className="text-center"
             >

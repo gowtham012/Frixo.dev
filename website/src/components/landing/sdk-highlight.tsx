@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 const platformFeatures = [
@@ -75,9 +74,6 @@ const capabilities = [
 ];
 
 export function SDKHighlight() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="relative py-24 overflow-hidden">
       {/* Background */}
@@ -90,15 +86,16 @@ export function SDKHighlight() {
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
           {/* Left - Content - Slides from left */}
           <motion.div
-            ref={ref}
             initial={{ opacity: 0, x: -60 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-8"
             >
               <motion.div
@@ -132,7 +129,8 @@ export function SDKHighlight() {
                 <motion.div
                   key={feature.title}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ margin: "-100px" }}
                   transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                   className="nm-inset-sm p-4"
                 >
@@ -174,7 +172,8 @@ export function SDKHighlight() {
           {/* Right - Visual - Slides from right */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             className="mt-12 lg:mt-0"
           >
@@ -204,7 +203,8 @@ export function SDKHighlight() {
                     <motion.div
                       key={cap.label}
                       initial={{ opacity: 0, scale: 0.9 }}
-                      animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ margin: "-100px" }}
                       transition={{ delay: 0.4 + i * 0.1 }}
                       className="card-hybrid p-4 flex flex-col items-center gap-2 group"
                     >

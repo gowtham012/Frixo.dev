@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { LogoDark } from "@/components/ui/logo";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -807,6 +808,8 @@ interface FlickeringGridProps extends React.HTMLAttributes<HTMLDivElement> {
   textColor?: string;
   fontSize?: number;
   fontWeight?: number | string;
+  imageSrc?: string; // Optional image to render as flickering pattern
+  imageHeight?: number; // Height of the image in pixels
 }
 
 export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
@@ -821,12 +824,38 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
   text = "",
   fontSize = 140,
   fontWeight = 600,
+  imageSrc,
+  imageHeight = 100,
   ...props
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const logoIconRef = useRef<HTMLImageElement | null>(null);
   const [isInView, setIsInView] = useState(false);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const [loadedImage, setLoadedImage] = useState<HTMLImageElement | null>(null);
+  const [logoIconLoaded, setLogoIconLoaded] = useState(false);
+
+  // Load image if imageSrc is provided
+  useEffect(() => {
+    if (imageSrc) {
+      const img = new Image();
+      img.onload = () => setLoadedImage(img);
+      img.src = imageSrc;
+    }
+  }, [imageSrc]);
+
+  // Load logo icon SVG for PITLANE_LOGO
+  useEffect(() => {
+    if (text === "PITLANE_LOGO") {
+      const img = new Image();
+      img.onload = () => {
+        logoIconRef.current = img;
+        setLogoIconLoaded(true);
+      };
+      img.src = "/logo-icon-white.svg";
+    }
+  }, [text]);
 
   // Convert any CSS color to rgba for optimal canvas performance
   const memoizedColor = useMemo(() => {
@@ -845,15 +874,63 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     ) => {
       ctx.clearRect(0, 0, width, height);
 
-      // Create a separate canvas for the text mask
+      // Create a separate canvas for the text/image mask
       const maskCanvas = document.createElement("canvas");
       maskCanvas.width = width;
       maskCanvas.height = height;
       const maskCtx = maskCanvas.getContext("2d", { willReadFrequently: true });
       if (!maskCtx) return;
 
+      // Draw image on mask canvas if provided
+      if (loadedImage) {
+        maskCtx.save();
+        const imgAspect = loadedImage.width / loadedImage.height;
+        const drawHeight = imageHeight * dpr;
+        const drawWidth = drawHeight * imgAspect;
+        const x = (width - drawWidth) / 2;
+        const y = (height - drawHeight) / 2;
+        maskCtx.drawImage(loadedImage, x, y, drawWidth, drawHeight);
+        maskCtx.restore();
+      }
+
+      // Draw logo with icon + text
+      if (text === "PITLANE_LOGO") {
+        maskCtx.save();
+        maskCtx.scale(dpr, dpr);
+        const centerX = width / (2 * dpr);
+        const centerY = height / (2 * dpr);
+
+        // Text sizing
+        const textContent = "PITLANE";
+        maskCtx.font = `900 italic ${fontSize}px "Arial Black", "Helvetica", sans-serif`;
+        const textMetrics = maskCtx.measureText(textContent);
+        const textWidth = textMetrics.width;
+
+        // Icon sizing - load SVG image
+        const iconHeight = fontSize * 1.2;
+        const iconWidth = iconHeight * (282 / 288); // Match SVG aspect ratio
+
+        // Layout: Icon + gap + Text
+        const gap = fontSize * 0.15;
+        const totalWidth = iconWidth + gap + textWidth;
+        const startX = centerX - totalWidth / 2;
+        const iconY = centerY - iconHeight / 2;
+
+        // Draw icon from loaded SVG image
+        if (logoIconRef.current) {
+          maskCtx.drawImage(logoIconRef.current, startX, iconY, iconWidth, iconHeight);
+        }
+
+        // Draw Text
+        maskCtx.fillStyle = "white";
+        maskCtx.textAlign = "left";
+        maskCtx.textBaseline = "middle";
+        maskCtx.fillText(textContent, startX + iconWidth + gap, centerY);
+
+        maskCtx.restore();
+      }
       // Draw text on mask canvas
-      if (text) {
+      else if (text) {
         maskCtx.save();
         maskCtx.scale(dpr, dpr);
         maskCtx.fillStyle = "white";
@@ -878,12 +955,13 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
             squareWidth,
             squareHeight,
           ).data;
-          const hasText = maskData.some(
-            (value, index) => index % 4 === 0 && value > 0,
+          // Check alpha channel (every 4th value starting at index 3)
+          const hasMask = maskData.some(
+            (value, index) => index % 4 === 3 && value > 0,
           );
 
           const opacity = squares[i * rows + j];
-          const finalOpacity = hasText
+          const finalOpacity = hasMask
             ? Math.min(1, opacity * 3 + 0.4)
             : opacity;
 
@@ -892,7 +970,7 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
         }
       }
     },
-    [memoizedColor, squareSize, gridGap, text, fontSize, fontWeight],
+    [memoizedColor, squareSize, gridGap, text, fontSize, fontWeight, loadedImage, imageHeight, logoIconLoaded],
   );
 
   const setupCanvas = useCallback(
@@ -1062,13 +1140,13 @@ export const Highlight = ({
 export const BLUR_FADE_DELAY = 0.15;
 
 // Social/external links - configurable via environment variables
-const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/frixo-dev";
-const TWITTER_URL = process.env.NEXT_PUBLIC_TWITTER_URL || "https://twitter.com/frixodev";
-const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL || "https://discord.gg/frixo";
+const GITHUB_URL = process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/getpitlanes";
+const TWITTER_URL = process.env.NEXT_PUBLIC_TWITTER_URL || "https://twitter.com/getpitlanes";
+const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_URL || "https://discord.gg/pitlanes";
 
 export const siteConfig = {
   hero: {
-    title: "Frixo.dev",
+    title: "Pitlane",
     description:
       "One prompt. Any agent. Build with integrated evals, tracing, A2A, memory, and multi-LLM fallback. Self-evolving agents. Deploy. Sell on marketplace.",
   },
@@ -1115,11 +1193,8 @@ export function Footer() {
     <footer id="footer" className="w-full pb-0 border-t border-background-border bg-background">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between p-10 max-w-7xl mx-auto">
         <div className="flex flex-col items-start justify-start gap-y-5 max-w-xs mx-0">
-          <Link href="/" className="flex items-center">
-            <span className="text-xl font-bold tracking-tight">
-              <span className="text-foreground">Frixo</span>
-              <span className="text-accent-cyan">.dev</span>
-            </span>
+          <Link href="/">
+            <LogoDark size="lg" />
           </Link>
           <p className="tracking-tight text-foreground-muted font-medium text-sm leading-relaxed">
             {siteConfig.hero.description}
@@ -1162,7 +1237,7 @@ export function Footer() {
           </div>
           {/* Copyright */}
           <p className="mt-4 text-xs text-foreground-dim">
-            © {new Date().getFullYear()} Frixo.dev. All rights reserved.
+            © {new Date().getFullYear()} Pitlane. All rights reserved.
           </p>
         </div>
         <div className="pt-5 md:pt-0 md:w-1/2">
@@ -1192,13 +1267,13 @@ export function Footer() {
         <div className="absolute inset-0 bg-gradient-to-t from-transparent to-background z-10 from-40%" />
         <div className="absolute inset-0 mx-6">
           <FlickeringGrid
-            text={tablet ? "Frixo.dev" : "Frixo.dev"}
+            text="PITLANE_LOGO"
             fontSize={tablet ? 70 : 90}
             className="h-full w-full"
-            squareSize={2}
-            gridGap={tablet ? 2 : 3}
+            squareSize={3}
+            gridGap={2}
             color="#00D4FF"
-            maxOpacity={0.25}
+            maxOpacity={0.35}
             flickerChance={0.1}
           />
         </div>

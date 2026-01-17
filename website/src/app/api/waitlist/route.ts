@@ -53,9 +53,9 @@ export async function POST(request: NextRequest) {
     // Example Resend integration:
     // const resend = new Resend(process.env.RESEND_API_KEY);
     // await resend.emails.send({
-    //   from: 'Frixo <hello@frixo.dev>',
+    //   from: 'Pitlane <hello@getpitlanes.com>',
     //   to: trimmedEmail,
-    //   subject: 'Welcome to the Frixo Waitlist!',
+    //   subject: 'Welcome to the Pitlane Waitlist!',
     //   html: '<p>Thanks for joining! We'll be in touch soon.</p>'
     // });
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const useCases = [
   {
@@ -84,13 +84,11 @@ const useCases = [
 
 export function UseCases() {
   const [activeCase, setActiveCase] = useState("linkedin");
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const activeUseCase = useCases.find((uc) => uc.id === activeCase);
 
   return (
-    <section ref={ref} id="use-cases" className="relative py-16 overflow-hidden">
+    <section id="use-cases" className="relative py-16 overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-0 w-[400px] h-[400px] bg-accent-blue/5 rounded-full blur-[120px]" />
@@ -101,13 +99,15 @@ export function UseCases() {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-10"
         >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-5"
           >
             <span className="w-2 h-2 rounded-full bg-accent-purple animate-pulse" />
@@ -127,7 +127,8 @@ export function UseCases() {
         {/* Use Case Selector - Neumorphic tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="nm-inset p-1.5 mb-8"
         >
@@ -137,7 +138,8 @@ export function UseCases() {
                 key={uc.id}
                 onClick={() => setActiveCase(uc.id)}
                 initial={{ opacity: 0, y: 10 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ margin: "-100px" }}
                 transition={{ delay: 0.15 + i * 0.05 }}
                 className={`relative p-3 text-left transition-all duration-300 ${
                   activeCase === uc.id

@@ -93,7 +93,7 @@ export function CodePreview() {
   }, [isInView, approved]);
 
   return (
-    <section className="relative py-32 overflow-hidden">
+    <section ref={ref} className="relative py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-accent-purple/5 rounded-full blur-[150px]" />
@@ -102,15 +102,16 @@ export function CodePreview() {
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-6"
           >
             <span className="w-2 h-2 rounded-full bg-accent-purple animate-pulse" />
@@ -131,7 +132,8 @@ export function CodePreview() {
         {/* Chat Interface */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative"
         >

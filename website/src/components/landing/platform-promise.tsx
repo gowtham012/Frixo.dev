@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 const evalTypes = [
   {
@@ -70,9 +69,6 @@ const evalTypes = [
 ];
 
 export function PlatformPromise() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="relative py-24 sm:py-32 overflow-hidden">
       {/* Background with dramatic gradient */}
@@ -85,9 +81,9 @@ export function PlatformPromise() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.5 }}
           className="text-center"
         >
@@ -117,7 +113,8 @@ export function PlatformPromise() {
           {/* Eval Types Grid */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mt-16"
           >
@@ -126,7 +123,8 @@ export function PlatformPromise() {
                 <motion.div
                   key={eval_.name}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ margin: "-100px" }}
                   transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
                   className="group relative"
                 >
@@ -145,7 +143,8 @@ export function PlatformPromise() {
           {/* Visual Flow */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.6 }}
             className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"
           >
@@ -193,7 +192,8 @@ export function PlatformPromise() {
           {/* Bottom Note */}
           <motion.p
             initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.8 }}
             className="mt-12 text-sm text-foreground-muted max-w-xl mx-auto"
           >

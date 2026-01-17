@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +11,7 @@ const pricingTiers = [
     price: "$0",
     features: ["Full SDK access", "Local development", "Community support", "Unlimited agents"],
     cta: "Get Started",
-    ctaHref: "https://github.com/frixo-dev/sdk",
+    ctaHref: "https://github.com/getpitlanes/sdk",
     highlighted: false,
   },
   {
@@ -37,17 +36,14 @@ const pricingTiers = [
 ];
 
 export function PricingPreview() {
-  const headerRef = useRef(null);
-  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
-
   return (
     <section className="relative py-32">
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          ref={headerRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
@@ -67,7 +63,8 @@ export function PricingPreview() {
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, y: 20 }}
-              animate={isHeaderInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className={`relative rounded-2xl border p-8 ${
                 tier.highlighted
@@ -120,7 +117,8 @@ export function PricingPreview() {
         {/* Bottom note */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={isHeaderInView ? { opacity: 1 } : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-12 text-center text-sm text-foreground-dim"
         >

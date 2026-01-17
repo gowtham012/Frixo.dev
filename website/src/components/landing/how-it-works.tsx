@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 const steps = [
   {
@@ -46,11 +45,8 @@ const steps = [
 ];
 
 export function HowItWorks() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section ref={ref} className="relative py-20 overflow-hidden">
+    <section className="relative py-20 overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent-purple/5 rounded-full blur-[150px]" />
@@ -60,13 +56,15 @@ export function HowItWorks() {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-6 mx-auto"
           >
             <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
@@ -86,7 +84,8 @@ export function HowItWorks() {
             <motion.div
               key={step.step}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
               className="relative group"
             >
@@ -142,7 +141,8 @@ export function HowItWorks() {
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-16 text-center"
         >

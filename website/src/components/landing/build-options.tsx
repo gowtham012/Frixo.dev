@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
 const buildOptions = [
   {
@@ -492,7 +492,7 @@ function CodeDemo({ isActive }: { isActive: boolean }) {
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        Full SDK docs at docs.frixo.dev
+        Full SDK docs at docs.getpitlanes.com
       </div>
     </div>
   );
@@ -501,8 +501,8 @@ function CodeDemo({ isActive }: { isActive: boolean }) {
 export function BuildOptions() {
   const [activeOption, setActiveOption] = useState("prompt");
   const [demoKey, setDemoKey] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const demoRef = useRef(null);
+  const isInView = useInView(demoRef, { once: true, margin: "-100px" });
 
   const activeData = buildOptions.find((o) => o.id === activeOption);
 
@@ -513,7 +513,7 @@ export function BuildOptions() {
   };
 
   return (
-    <section ref={ref} className="relative py-32 overflow-hidden">
+    <section className="relative py-32 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-cyan/5 rounded-full blur-[200px]" />
@@ -523,13 +523,15 @@ export function BuildOptions() {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
           <motion.div
             initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-6"
           >
             <span className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
@@ -549,7 +551,8 @@ export function BuildOptions() {
         {/* Toggle */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="flex justify-center mb-12"
         >
@@ -706,7 +709,7 @@ export function BuildOptions() {
               </div>
 
               {/* Demo Content */}
-              <div className="p-6 min-h-[380px]">
+              <div ref={demoRef} className="p-6 min-h-[380px]">
                 <AnimatePresence mode="wait">
                   {activeOption === "prompt" ? (
                     <motion.div
@@ -737,7 +740,8 @@ export function BuildOptions() {
         {/* Mobile-only: Production Features (shown below on smaller screens) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-12 xl:hidden"
         >

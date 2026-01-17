@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 const features = [
   {
@@ -74,11 +73,8 @@ const stats = [
 ];
 
 export function Features() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section ref={ref} id="features" className="relative py-20 overflow-hidden">
+    <section id="features" className="relative py-20 overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-80 h-80 bg-accent-purple/5 rounded-full blur-[100px]" />
@@ -89,7 +85,8 @@ export function Features() {
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
@@ -110,7 +107,8 @@ export function Features() {
             <motion.div
               key={feature.title}
               initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
               className="group"
             >
@@ -136,7 +134,8 @@ export function Features() {
         {/* Bottom Section - Guarantee + Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="nm-extruded p-6"
         >
@@ -167,7 +166,8 @@ export function Features() {
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ margin: "-100px" }}
                   transition={{ delay: 0.6 + i * 0.1 }}
                   className="text-center"
                 >

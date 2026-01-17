@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const pricingTiers = [
@@ -22,7 +22,7 @@ const pricingTiers = [
       "SLA": "—",
     },
     cta: "Download SDK",
-    href: "https://github.com/frixo-dev",
+    href: "https://github.com/getpitlanes",
     gradient: "from-foreground-dim to-foreground-muted",
   },
   {
@@ -136,16 +136,13 @@ function PricingCard({
   index: number;
   isAnnual: boolean;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   const price = isAnnual ? tier.price.annual : tier.price.monthly;
 
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ margin: "-100px" }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className={`relative ${tier.popular ? "card-hybrid" : "nm-extruded"} p-6 sm:p-8 h-full flex flex-col`}
     >
@@ -258,18 +255,17 @@ function PricingCard({
 function FAQItem({
   faq,
   index,
-  isInView,
 }: {
   faq: (typeof faqs)[0];
   index: number;
-  isInView: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ margin: "-100px" }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
     >
       <button
@@ -307,15 +303,6 @@ function FAQItem({
 
 export default function PricingPage() {
   const [isAnnual, setIsAnnual] = useState(false);
-  const headerRef = useRef(null);
-  const addOnsRef = useRef(null);
-  const faqRef = useRef(null);
-  const ctaRef = useRef(null);
-
-  const isHeaderInView = useInView(headerRef, { once: true, margin: "-100px" });
-  const isAddOnsInView = useInView(addOnsRef, { once: true, margin: "-100px" });
-  const isFaqInView = useInView(faqRef, { once: true, margin: "-100px" });
-  const isCtaInView = useInView(ctaRef, { once: true, margin: "-100px" });
 
   return (
     <div className="pt-24">
@@ -329,16 +316,17 @@ export default function PricingPage() {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
-            ref={headerRef}
             initial={{ opacity: 0, y: 30 }}
-            animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="text-center"
           >
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
-              animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ delay: 0.1 }}
               className="nm-extruded-sm inline-flex items-center gap-2 px-4 py-2 mb-8"
             >
@@ -358,7 +346,8 @@ export default function PricingPage() {
             {/* Billing Toggle */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={isHeaderInView ? { opacity: 1, y: 0 } : {}}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-100px" }}
               transition={{ delay: 0.3 }}
               className="mt-10 flex items-center justify-center"
             >
@@ -411,7 +400,7 @@ export default function PricingPage() {
       </section>
 
       {/* Add-ons */}
-      <section ref={addOnsRef} className="relative py-20 sm:py-28 overflow-hidden">
+      <section className="relative py-20 sm:py-28 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-accent-purple/5 rounded-full blur-[150px] -translate-y-1/2" />
@@ -420,7 +409,8 @@ export default function PricingPage() {
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isAddOnsInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
@@ -443,7 +433,8 @@ export default function PricingPage() {
               <motion.div
                 key={addon.name}
                 initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                animate={isAddOnsInView ? { opacity: 1, x: 0 } : {}}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ margin: "-100px" }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="nm-extruded p-5 flex items-center gap-4 group hover:scale-[1.02] transition-transform duration-300"
               >
@@ -482,7 +473,7 @@ export default function PricingPage() {
       </section>
 
       {/* FAQ */}
-      <section ref={faqRef} className="relative py-20 sm:py-28 overflow-hidden">
+      <section className="relative py-20 sm:py-28 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent-cyan/5 rounded-full blur-[150px]" />
@@ -491,7 +482,8 @@ export default function PricingPage() {
         <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isFaqInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ duration: 0.5 }}
             className="text-center mb-12"
           >
@@ -508,14 +500,14 @@ export default function PricingPage() {
 
           <div className="space-y-3">
             {faqs.map((faq, index) => (
-              <FAQItem key={index} faq={faq} index={index} isInView={isFaqInView} />
+              <FAQItem key={index} faq={faq} index={index} />
             ))}
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section ref={ctaRef} className="relative py-20 sm:py-28 overflow-hidden">
+      <section className="relative py-20 sm:py-28 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-accent-cyan/5 rounded-full blur-[200px]" />
@@ -523,7 +515,8 @@ export default function PricingPage() {
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
-          animate={isCtaInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.7 }}
           className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8"
         >
@@ -550,7 +543,7 @@ export default function PricingPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
-                  href="https://github.com/frixo-dev"
+                  href="https://github.com/getpitlanes"
                   target="_blank"
                   className="nm-button h-12 px-6 flex items-center gap-3 text-foreground-muted hover:text-accent-cyan transition-colors group"
                 >

@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { siteConfig } from "@/components/ui/flickering-footer";
 
 export function CTASection() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +33,7 @@ export function CTASection() {
   };
 
   return (
-    <section id="waitlist" ref={ref} className="relative py-20 overflow-hidden">
+    <section id="waitlist" className="relative py-20 overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-accent-cyan/8 rounded-full blur-[100px]" />
@@ -46,7 +43,8 @@ export function CTASection() {
         {/* Main CTA card - Scale up from center */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ margin: "-100px" }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="nm-extruded p-8 sm:p-10 text-center relative overflow-hidden"
         >
@@ -63,7 +61,8 @@ export function CTASection() {
           {/* Email form */}
           <motion.form
             initial={{ opacity: 0, y: 10 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ margin: "-100px" }}
             transition={{ delay: 0.2 }}
             onSubmit={handleSubmit}
             className="max-w-md mx-auto mb-6"
